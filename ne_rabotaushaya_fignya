@@ -1,0 +1,31 @@
+#include <Adafruit_NeoPixel.h>
+#define PIN 11
+#define NUMPIXELS 3
+#define BRIGHTNESS 100
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+  pixels.begin();                    // Инициализация ленты
+  pixels.setBrightness(BRIGHTNESS);  // Установка яркости
+}
+
+void loop() {
+  pixels.clear();                               // Выключение всех светодиодов
+  for (int ColorJ = 0; ColorJ < 3; ColorJ++) {  // Цикл для смены цветов 0 - красный, 1 - зеленый, 2 - синий
+    for (int j = 0; j <= 255; j++) {            // Цикл для плавного изменения яркости от минимума до максимума
+      for (int i = 0; i < NUMPIXELS; i++) {     // Формирование пакета с указанием цвета для каждого светодиода
+        pixels.setPixelColor(i, ColorJ == 0 ? j : 0, ColorJ == 1 ? j : 0, ColorJ == 2 ? j : 0);
+      }
+      pixels.show();           // отправка сформированного пакета на ленту
+      delayMicroseconds(250);  // Ожидание 250 микросекунд
+    }
+
+    for (int j = 255; j >= 0; j--) {                                                             // Цикл для плавного изменения яркости от максимума до минимума
+      for (int i = 0; i < NUMPIXELS; i++) {                                                      // Формирование пакета с указанием цвета для каждого светодиода
+        pixels.setPixelColor(i, ColorJ == 0 ? j : 0, ColorJ == 1 ? j : 0, ColorJ == 2 ? j : 0);  // Формирование пакета с указанием цвета для каждого светодиода
+      }
+      pixels.show();           // отправка сформированного пакета на ленту
+      delayMicroseconds(250);  // Ожидание 250 микросекунд
+    }
+  }
+}
