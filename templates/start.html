@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Умный Город</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5bfed;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #df33a3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        a:hover {
+            background-color: #8e3e6f;
+        }
+
+        .weather-info, .street-info {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            margin-right: 20px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .street-info p {
+            margin-bottom: 5px;
+        }
+
+        .alert-text {
+            color: #d9534f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Умный Город</h1>
+
+    <div class="weather-info">
+        <h2>Погода</h2>
+        <p>Температура: {{ temperature }}°C</p>
+        <p>Влажность: {{ humidity }}%</p>
+        <p>Атмосферное давление: {{ pressure }} мм рт. ст.</p>
+        <p>{{ clothing_recommendation }}</p>
+    </div>
+
+    <div class="weather-info">
+        <h2>Качество воздуха</h2>
+        <p>Степень загрязнения воздуха: <span class="{{ 'alert-text' if 'высокий' in air_pollution.lower() else '' }}">{{ air_pollution }}</span></p>
+        <p>{{ air_quality_recommendation }}</p>
+    </div>
+
+    <div class="street-info">
+        <h2>Количество электрокаров в минуту:</h2>
+        <p>Улица 1 - {{ count_auto1 }}</p>
+        <p>Улица 2 - {{ count_auto2 }}</p>
+    </div>
+
+    <div class="street-info">
+        <h2>Освещенность</h2>
+        <p>Улица 1 - {{ count_sun1 }}</p>
+        <p>Улица 2 - {{ count_sun2 }}</p>
+        <p>Улица 3 - {{ count_sun3 }}</p>
+        <p>Улица 4 - {{ count_sun4 }}</p>
+    </div>
+
+    <a href="{{ url_for('parking') }}">Умная парковка</a>
+    <a href="/barrier">Умный шлагбаум</a>
+</body>
+</html>

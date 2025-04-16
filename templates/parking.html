@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о парковке</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5bfed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #df33a3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            text-align: center;
+        }
+
+        a:hover {
+            background-color: #8e3e6f;
+        }
+
+        .parking-info {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+            display: inline-block;
+            padding: 10px 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Умная парковка</h1>
+    <div class="parking-info">
+        <p>Время до окончания зарядки: {{ parking_info.charging_time_left }} минут</p>
+        {% if parking_info.is_available %}
+            <p>забронировать</p>
+        {% else %}
+            <p>занято</p>
+        {% endif %}
+        {% if fire %}
+            <p>Есть возгорания</p>
+        {% else %}
+            <p>Возгорания нет</p>
+        {% endif %}
+        {% if leak %}
+            <p>Есть протечки</p>
+        {% else %}
+            <p>Протечки нет</p>
+        {% endif %}
+    </div>
+    <a href="/">На главную</a>
+</body>
+</html>
