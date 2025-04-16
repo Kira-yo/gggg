@@ -1,0 +1,29 @@
+#include <WiFi.h>
+
+const char* ssid = "TP-Link_4F90";
+const char* password = "NTOContest202324";
+
+const char* serverAddress = "http:///api";
+
+void setup() {
+  
+  Serial.begin(115200)
+  WiFi.begin(ssid, password);
+  Serial.print("IP адрес устройства: ");
+  Serial.println(WiFi.localIP());
+}
+
+void loop() {
+  WiFiClient client;
+
+  const int httpPort = 80;
+  String request = "POST /api HTTP/1.1\r\n";
+  request += "Host: example.com\r\n";
+  request += "Content-Type: application/x-www-form-urlencoded\r\n";
+  request += "Content-Length: " + String(data.length()) + "\r\n";
+  request += "Connection: close\r\n\r\n";
+  request += data;
+
+  client.print(request);
+  client.stop();
+}
