@@ -8,11 +8,6 @@ def handle_svetofor():
     if request.method == 'POST':
         svetofor = eval(request.get_json(silent=True) or request.form.to_dict())
 
-@app.route("/api/parkovka", methods=['GET', 'POST'])
-def handle_parkovka():
-    if request.method == 'POST':
-        parkovka = eval(request.get_json(silent=True) or request.form.to_dict())
-
 def get_temperature_and_humidity():
     """ температура и влажность."""
     temperature = random.randint(-10, 30)
@@ -65,35 +60,28 @@ def get_count_sun():
 
 @app.route("/")
 def home():
-    temperature, humidity = get_temperature_and_humidity()
-    pressure=get_pressure()
-    air_pollution = get_air_quality()
-    clothing_recommendation = get_clothing_recommendation(temperature, humidity)
-    air_quality_recommendation = get_air_quality_recommendation(air_pollution)
-    count_auto1, count_auto2 = get_count_auto()
-    count_sun1, count_sun2, count_sun3, count_sun4 = get_count_sun()
+    if request.method == 'POST':
+        svetofor = eval(request.get_json(silent=True) or request.form.to_dict())
+    temperature, humidity = svetofor["t"], svetofor["h"]
+    pressure=svetofor["p"]
+    air_pollution = [svetofor["co2"], svetofor["TVOC"]]
 
     return render_template("start.html",
                            temperature=temperature,
                            humidity=humidity,
                            pressure=pressure,
-                           air_pollution=air_pollution,
-                           clothing_recommendation=clothing_recommendation,
-                           air_quality_recommendation=air_quality_recommendation,
-                           count_auto1=count_auto1,
-                           count_auto2=count_auto2,
-                           count_sun1=count_sun1,
-                           count_sun2=count_sun2,
-                           count_sun3=count_sun3,
-                           count_sun4=count_sun4
+                           air_pollution=air_pollution
     )
 
 #Страница с информацией о парковке.
 @app.route("/parking")
 def parking():
-    user_id = "user123"  # Замените на реальную идентификацию пользователя
-    parking_info = get_parking_info(user_id)
-    return render_template("parking.html", parking_info=parking_info)
+    if request.method == 'POST':
+        parkovka = eval(request.get_json(silent=True) or request.form.to_dict())
+    parking_info = parkovka["dist"]
+    fire = parkovka["fire"]
+    vaza = parkovka["vaza"]
+    return render_template("parking.html", parking_info=parking_info, fire=fire, vaza=vaza)
 
 #Страница с информацией о железнодорожном переезде.
 @app.route("/barrier")
