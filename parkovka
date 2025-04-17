@@ -1,0 +1,51 @@
+#include <Wire.h>
+#include <MGS_FR403.h>
+#include "mcp3021.h"
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <VL53L0X.h>
+VL53L0X lox;
+MGS_FR403 Fire;
+byte ADDR = 0b001;
+MCP3021 mcp3021;
+
+const char* ssid = "TP-Link_4F90";
+const char* password = "NTOContest202324";
+
+const char* serverUrl = "http://192.168.0.53:5000/parking";
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, password);
+  Wire.begin();
+  lox.init();
+  lox.setTimeout(500);
+  lox.setMeasurementTimingBudget(200000);
+  Fire.begin();
+  mcp3021.begin(ADDR);
+}
+
+void loop() {
+  Fire.get_ir_and_vis();
+  float adc0 = mcp3021.readADC();
+  float dist = lox.readRangeSingleMillimeters();
+  Serial.print("ИК: ");
+  Serial.println(String(Fire.ir_data, 1));
+  Serial.print("Видимый: ");
+  Serial.println(String(Fire.vis_data, 1));
+
+  String payload = "{\"sensor\":\"parkovka\",\"fire\":[" + String(Fire.vis_data, 1) + "," + String(Fire.vis_data, 1) + "],\"dist\":" + String(dist, 0) + ",\"vaza\":" + String(adc0, 1) + "}"; 
+
+  if (WiFi.status() == WL_CONNECTED) {  // Проверяем подключение
+    HTTPClient http;
+    
+    // Начинаем HTTP-соединение
+    http.begin(serverUrl);
+    http.addHeader("Content-Type", "application/json");  // Указываем тип данных (можно изменить)
+    
+    // Отправка POST-запроса с данными
+    int httpResponseCode = http.POST(payload);
+    http.end();
+  }
+  delay(500);
+}
