@@ -1,7 +1,18 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import random
 
 app = Flask(__name__)
+
+@app.route("/api/svetofor", methods=['GET', 'POST'])
+def handle_svetofor():
+    if request.method == 'POST':
+        svetofor = eval(request.get_json(silent=True) or request.form.to_dict())
+
+@app.route("/api/parkovka", methods=['GET', 'POST'])
+def handle_parkovka():
+    if request.method == 'POST':
+        parkovka = eval(request.get_json(silent=True) or request.form.to_dict())
+
 def get_temperature_and_humidity():
     """ температура и влажность."""
     temperature = random.randint(-10, 30)
@@ -93,3 +104,4 @@ def barrier():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
+    "степа красава"
